@@ -1,24 +1,44 @@
-#include <PRIZM.h>      // Include the PRIZM library from Tetrix
+#include <TELEOP.h>   
+#include <PRIZM.h>    
 
- 
+PRIZM prizm;          
+PS4 ps4;              
 
-PRIZM prizm;            // Instantiate a PRIZM object "prizm" so we can use its functions
+void setup() {
+  prizm.PrizmBegin();
+  prizm.setServoPosition(1,10); //Set servo 1 to 10 deg
+}
+void loop() {
 
- 
+  ps4.getPS4();
+  if (ps4.Connected){
+   Drive();
+   Pincher();
+  }
+}  //CLose Loop
 
-void setup() {          // run this code once
-
- 
-
-prizm.PrizmBegin();   // initialize the PRIZM controller
-
- 
-
+void Dive();
+  int rawSpeed = ps4.Touchpad(TOUCHX);
+  int mappedMaxSpeed = map(rawSpeed, 0, 1920, 0, 720);
+  int joyStickL = ps4.Stick(LY);
+  int mappedjoystickL = map(joyStickL, 0, 255, 0, mappedMaxSpeed);
+  int joyStickR = ps4.Stick(RY);
+  prizm.setMotorSpeeds(mappedJoyStickL,MappedJoyStickR);
 }
 
- 
 
-void loop() {     // repeat this code in a loop
-  // Code Here
+
+
+void Pincher(){
+   if(ps4.Button(L1)){
+      prizm.setServoPosition(1,0); //CLose
+    }
+    if(ps4.Button(R1)){
+    prizm.setServoPosition(1,50); //Open
+    }
 }
- 
+
+
+
+  
+}
